@@ -7,9 +7,6 @@ def generate_deepzoom(input_path, output_basename, tile_size=256, overlap=0, suf
     # Sauvegarder en DeepZoom
     image.dzsave(output_basename, tile_size=tile_size, overlap=overlap, suffix=suffix)
 
-    print(f"Pyramide générée : {output_basename}.dzi")
-    print(f"Tuiles disponibles dans : {output_basename}_files/")
-
 
 ## Exemple d'utilisation
 #if __name__ == "__main__":
