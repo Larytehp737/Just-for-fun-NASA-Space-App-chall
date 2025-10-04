@@ -22,3 +22,7 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+
+# dev4 files
+bootstrap.sh
+.NASAenv/
