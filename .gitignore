@@ -26,3 +26,17 @@ lerna-debug.log*
 # dev4 files
 bootstrap.sh
 .NASAenv/
+
+# Ignore l'environnement virtuel Python
+backend/venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VSCode config (si tu utilises VSCode)
+.vscode/
+
+# Mac & Linux & Windows
+.DS_Store
+Thumbs.db
