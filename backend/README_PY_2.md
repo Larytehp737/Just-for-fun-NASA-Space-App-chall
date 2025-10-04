@@ -16,7 +16,7 @@ Il permet :
 Installer les dépendances dans l’environnement virtuel :
 
 ```bash
-pip install pyvips pillow
+pip install pyvips
 ```
 
 (Sous Debian/Ubuntu, il faut aussi : `sudo apt install libvips libvips-tools`)
