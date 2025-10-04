@@ -1,0 +1,125 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --background-secondary: 210 40% 96%;
+    --foreground: 222 47% 11%;
+    --foreground-secondary: 215 25% 27%;
+    
+    --primary: 222 47% 11%;
+    --primary-hover: 222 47% 8%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96%;
+    --secondary-hover: 215 20% 92%;
+    --secondary-foreground: 222 47% 11%;
+    
+    --accent: 262 80% 50%;
+    --accent-hover: 262 80% 45%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-hover: 0 84% 55%;
+    --destructive-foreground: 210 40% 98%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --background-secondary: 222 47% 9%;
+    --foreground: 210 40% 98%;
+    --foreground-secondary: 215 20% 65%;
+    
+    --primary: 210 40% 98%;
+    --primary-hover: 210 40% 93%;
+    --primary-foreground: 222 47% 11%;
+    
+    --secondary: 217 32% 17%;
+    --secondary-hover: 217 32% 20%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --accent: 262 80% 60%;
+    --accent-hover: 262 80% 65%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-hover: 0 84% 65%;
+    --destructive-foreground: 210 40% 98%;
+  }
+}
+
+@layer components {
+  /* Cards */
+  .card {
+    @apply relative overflow-hidden rounded-lg border border-foreground/10 bg-background p-6 shadow-lg transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply hover:border-accent/50 hover:shadow-accent/25;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-colors duration-200 
+           focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary-hover;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary-hover;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent-hover;
+  }
+
+  /* Inputs */
+  .input {
+    @apply rounded-md border border-foreground/20 bg-background px-3 py-2 text-sm
+           focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent;
+  }
+
+  /* Gradients */
+  .gradient-border {
+    @apply relative before:absolute before:inset-0 before:-z-10 before:p-[2px] before:rounded-lg
+           before:bg-gradient-to-r before:from-accent before:to-primary before:opacity-0
+           hover:before:opacity-100 before:transition-opacity;
+  }
+
+  /* Loading effects */
+  .loading-gradient {
+    @apply relative overflow-hidden before:absolute before:inset-0
+           before:translate-x-[-100%] before:animate-[shimmer_2s_infinite]
+           before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent;
+  }
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
