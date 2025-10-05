@@ -1,13 +1,25 @@
 'use client';
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ImageUploader } from './components/ImageUploader'
 import { Navbar } from './components/Navbar'
 import { Upload, Sparkles, Eye } from 'lucide-react'
+import { useUserPreferences } from './store/userPreferences'
+import { KidsToolbar } from './components/KidsToolbar'
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const { settings, updateSettings } = useUserPreferences()
+
+  // Initialize kids mode from URL on first load
+  useEffect(() => {
+    const url = new URL(window.location.href)
+    const kidsParam = url.searchParams.get('kids')
+    if (kidsParam === '1' && !settings.kidsMode) {
+      updateSettings({ kidsMode: true })
+    }
+  }, [])
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode)
@@ -79,15 +91,25 @@ function App() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5 }}
-              className="max-w-4xl mx-auto"
+              className="max-w-4xl mx-auto space-y-8"
             >
-              <div className="text-center mb-8">
+              <div className="text-center">
                 <h2 className="text-2xl font-semibold mb-2">Commencez dès maintenant</h2>
                 <p className="text-foreground/60">
                   Importez une photo pour découvrir la magie de l'amélioration des yeux
                 </p>
               </div>
               <ImageUploader onImageUpload={(file: File) => console.log('Image uploadée:', file)} />
+              
+              {settings.kidsMode && (
+                <div className="mt-8 relative bg-background/50 backdrop-blur-sm border border-accent/20 rounded-xl p-6">
+                  <KidsToolbar
+                    onZoom={() => alert('Zoomer: essaie le pincement ou la molette pour agrandir !')}
+                    onExplore={() => alert('Explorer: regarde autour de l\'image et cherche des détails amusants !')}
+                    onNote={() => alert('Noter: dans la version NASA, tu pourras déposer des stickers et des notes !')}
+                  />
+                </div>
+              )}
             </motion.div>
           </div>
         </main>

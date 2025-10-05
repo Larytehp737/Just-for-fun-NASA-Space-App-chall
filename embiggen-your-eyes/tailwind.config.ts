@@ -5,6 +5,7 @@ const config: Config = {
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   darkMode: 'class',
+  plugins: [require('@tailwindcss/forms')],
   theme: {
     extend: {
       colors: {
@@ -30,7 +31,8 @@ const config: Config = {
           DEFAULT: 'hsl(var(--accent))',
           hover: 'hsl(var(--accent-hover))',
           foreground: 'hsl(var(--accent-foreground))'
-        }
+        },
+        border: 'hsl(var(--border))'
       },
       animation: {
         'gradient-x': 'gradient-x 15s ease infinite',

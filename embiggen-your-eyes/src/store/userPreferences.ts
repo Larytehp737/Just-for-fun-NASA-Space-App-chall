@@ -8,6 +8,7 @@ interface UserSettings {
   highContrast: boolean;
   animationSpeed: number;
   darkMode: boolean;
+  kidsMode: boolean;
 }
 
 interface UserPreferences {
@@ -23,6 +24,7 @@ const defaultSettings: UserSettings = {
   highContrast: false,
   animationSpeed: 1,
   darkMode: false,
+  kidsMode: false,
 };
 
 export const useUserPreferences = create<UserPreferences>()(
