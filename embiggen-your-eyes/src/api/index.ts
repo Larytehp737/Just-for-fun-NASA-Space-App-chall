@@ -3,18 +3,7 @@ import axios from 'axios';
 // In Vite, environment variables are exposed on import.meta.env and must be prefixed with VITE_
 const API_BASE_URL = (import.meta as any).env?.VITE_API_URL ?? 'http://localhost:8000';
 
-interface ProcessImageParams {
-  image: File | string;
-  style: string;
-  intensity: number;
-  annotations: Array<{
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-    type: 'eye' | 'face';
-  }>;
-}
+
 
 export const api = {
   // Détection d'anomalies (correspond au backend FastAPI)

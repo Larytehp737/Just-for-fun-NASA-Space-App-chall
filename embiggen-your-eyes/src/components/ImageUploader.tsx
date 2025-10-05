@@ -63,9 +63,7 @@ export function ImageUploader({ onImageUpload, maxSize = 10 }: ImageUploaderProp
           exit={{ opacity: 0, y: -20 }}
           className="space-y-4"
         >
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <div
             className={`
               relative p-8 border-2 border-dashed rounded-lg
               bg-background/50 backdrop-blur-sm
@@ -78,7 +76,6 @@ export function ImageUploader({ onImageUpload, maxSize = 10 }: ImageUploaderProp
             {...getRootProps()}
           >
             <input {...getInputProps()} />
-            
             {preview ? (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -124,7 +121,7 @@ export function ImageUploader({ onImageUpload, maxSize = 10 }: ImageUploaderProp
                 )}
               </div>
             )}
-          </motion.div>
+          </div>
         </motion.div>
       </AnimatePresence>
     </div>

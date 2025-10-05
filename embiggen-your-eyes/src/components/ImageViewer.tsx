@@ -8,7 +8,6 @@ interface ImageViewerProps {
   onLevelChange?: (level: number) => void; // niveau pyramidal approx selon zoom
   annotations?: Annotation[];
   onAnnotationAdd?: (annotation: Annotation) => void;
-  onAnnotationUpdate?: (annotation: Annotation) => void;
 }
 
 interface Annotation {
@@ -28,10 +27,9 @@ export const ImageViewer = ({
   overlayOpacity = 0.6,
   annotations = [],
   onAnnotationAdd,
-  onAnnotationUpdate,
   onLevelChange
 }: ImageViewerProps) => {
-  const viewerRef = useRef<OpenSeadragon.Viewer | null>(null);
+  const viewerRef = useRef<any>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const heatmapElRef = useRef<HTMLImageElement | null>(null);
 
