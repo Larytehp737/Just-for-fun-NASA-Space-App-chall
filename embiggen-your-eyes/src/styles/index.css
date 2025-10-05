@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* Styles pour les annotations OpenSeadragon */
+  .annotation-overlay {
+    @apply absolute border-2 rounded-lg cursor-move transition-colors duration-200;
+  }
+
+  .annotation-overlay.eye {
+    @apply border-primary bg-primary/10 hover:bg-primary/20;
+    min-width: 30px;
+    min-height: 20px;
+  }
+
+  .annotation-overlay.face {
+    @apply border-secondary bg-secondary/10 hover:bg-secondary/20;
+    min-width: 60px;
+    min-height: 80px;
+  }
+
+  /* Styles pour les contrôles de l'image */
+  .image-controls {
+    @apply fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm 
+           p-4 shadow-lg border-t border-gray-200;
+  }
+
+  /* Styles pour le slider de comparaison */
+  .comparison-slider {
+    @apply absolute top-0 bottom-0 w-1 bg-white cursor-col-resize
+           shadow-[0_0_10px_rgba(0,0,0,0.3)];
+  }
+
+  .comparison-handle {
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+           w-8 h-8 bg-white rounded-full shadow-lg
+           flex items-center justify-center
+           cursor-col-resize;
+  }
+
+  /* Styles pour les boutons d'action */
+  .action-button {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .action-button-primary {
+    @apply action-button bg-primary text-white 
+           hover:bg-primary/90 active:bg-primary/80;
+  }
+
+  .action-button-secondary {
+    @apply action-button bg-secondary text-white
+           hover:bg-secondary/90 active:bg-secondary/80;
+  }
+
+  /* Styles pour les tooltips d'aide */
+  .tooltip {
+    @apply absolute z-50 px-2 py-1 text-xs text-white bg-gray-900 rounded
+           opacity-0 transition-opacity duration-200;
+  }
+
+  .has-tooltip:hover + .tooltip {
+    @apply opacity-100;
+  }
+}
