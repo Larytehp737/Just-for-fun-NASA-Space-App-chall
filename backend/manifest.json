@@ -1,0 +1,15 @@
+{
+  "base_level": 8,
+  "images": [
+    {
+      "id": "sample1",
+      "source": "backend/data/samples/sample.png",
+      "levels": [2,4,6,8]
+    },
+    {
+      "id": "sample2",
+      "source": "backend/data/samples/sample.png",
+      "levels": [3,5,7]
+    }
+  ]
+}

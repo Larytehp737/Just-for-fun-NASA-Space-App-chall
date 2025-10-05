@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
+// In Vite, environment variables are exposed on import.meta.env and must be prefixed with VITE_
+const API_BASE_URL = (import.meta as any).env?.VITE_API_URL ?? 'http://localhost:8000';
 
 interface ProcessImageParams {
   image: File | string;
@@ -16,21 +17,36 @@ interface ProcessImageParams {
 }
 
 export const api = {
-  // Traitement d'image
-  async processImage({ image, style, intensity, annotations }: ProcessImageParams) {
-    const formData = new FormData();
-    
-    if (image instanceof File) {
-      formData.append('image', image);
-    } else {
-      formData.append('imageUrl', image);
-    }
-    
-    formData.append('style', style);
-    formData.append('intensity', intensity.toString());
-    formData.append('annotations', JSON.stringify(annotations));
+  // Détection d'anomalies (correspond au backend FastAPI)
+  async detectAnomalies(level: number = 0) {
+    const response = await axios.get(`${API_BASE_URL}/detect?level=${level}`);
+    return response.data;
+  },
 
-    const response = await axios.post(`${API_BASE_URL}/process`, formData, {
+  // Récupération des annotations
+  async getAnnotations() {
+    const response = await axios.get(`${API_BASE_URL}/annotations`);
+    return response.data;
+  },
+
+  // Ajout d'une annotation
+  async addAnnotation(annotation: any) {
+    const response = await axios.post(`${API_BASE_URL}/annotations`, annotation);
+    return response.data;
+  },
+
+  // Suppression des annotations
+  async clearAnnotations() {
+    const response = await axios.delete(`${API_BASE_URL}/annotations`);
+    return response.data;
+  },
+
+  // Upload d'image pour traitement
+  async uploadImage(image: File) {
+    const formData = new FormData();
+    formData.append('image', image);
+
+    const response = await axios.post(`${API_BASE_URL}/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -39,34 +55,27 @@ export const api = {
     return response.data;
   },
 
-  // Détection automatique des yeux
-  async detectEyes(image: File | string) {
-    const formData = new FormData();
-    
-    if (image instanceof File) {
-      formData.append('image', image);
-    } else {
-      formData.append('imageUrl', image);
-    }
-
-    const response = await axios.post(`${API_BASE_URL}/detect-eyes`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+  // Génération de tuiles DZI
+  async generateTiles(imagePath: string) {
+    const response = await axios.post(`${API_BASE_URL}/generate-tiles`, {
+      image_path: imagePath
     });
-
     return response.data;
   },
 
-  // Récupération des styles disponibles
-  async getStyles() {
-    const response = await axios.get(`${API_BASE_URL}/styles`);
-    return response.data;
+  // Détection sur un chemin donné (retourne un Blob PNG)
+  async detectOnPath(imagePath: string, level: number = 0): Promise<Blob> {
+    const response = await axios.post(
+      `${API_BASE_URL}/detect-on-path?level=${level}`,
+      { image_path: imagePath },
+      { responseType: 'blob' }
+    );
+    return response.data as Blob;
   },
 
-  // Sauvegarde d'un style personnalisé
-  async saveCustomStyle(style: any) {
-    const response = await axios.post(`${API_BASE_URL}/styles`, style);
+  // Health check
+  async healthCheck() {
+    const response = await axios.get(`${API_BASE_URL}/health`);
     return response.data;
   }
 };

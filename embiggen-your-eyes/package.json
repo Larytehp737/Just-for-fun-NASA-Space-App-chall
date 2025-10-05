@@ -13,6 +13,7 @@
     "@radix-ui/react-slider": "^1.1.2",
     "framer-motion": "^10.16.4",
     "lucide-react": "^0.291.0",
+    "openseadragon": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
@@ -20,7 +21,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",

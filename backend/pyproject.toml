@@ -14,3 +14,12 @@ dependencies = [
   "scikit-image>=0.24",
   "requests>=2.32"
 ]
+
+# Configure setuptools package discovery for flat layout
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["data*", "tests*", "__pycache__*"]
+

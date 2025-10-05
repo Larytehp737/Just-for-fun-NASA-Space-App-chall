@@ -1,13 +1,44 @@
 'use client';
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ImageUploader } from './components/ImageUploader'
+import { ImageViewer } from './components/ImageViewer'
+import { api } from './api'
 import { Navbar } from './components/Navbar'
 import { Upload, Sparkles, Eye } from 'lucide-react'
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [dziUrl, setDziUrl] = useState<string | null>(null)
+  const [lastUploadPath, setLastUploadPath] = useState<string | null>(null)
+  const [busy, setBusy] = useState<boolean>(false)
+  const [overlayUrl, setOverlayUrl] = useState<string | undefined>(undefined)
+  const [overlayOpacity, setOverlayOpacity] = useState<number>(0.6)
+  const [viewerLevel, setViewerLevel] = useState<number>(0)
+  const [autoDetect, setAutoDetect] = useState<boolean>(true)
+  const [detectTimer, setDetectTimer] = useState<number | undefined>(undefined)
+
+  // Détection auto avec debounce sur changement de niveau
+  useEffect(() => {
+    if (!autoDetect || !lastUploadPath || !dziUrl) return
+    // clear précédent
+    if (detectTimer) window.clearTimeout(detectTimer)
+    const t = window.setTimeout(async () => {
+      try {
+        setBusy(true)
+        const blob = await api.detectOnPath(lastUploadPath, viewerLevel)
+        const url = URL.createObjectURL(blob)
+        setOverlayUrl(url)
+      } catch (e) {
+        console.error('Auto detect error', e)
+      } finally {
+        setBusy(false)
+      }
+    }, 400) // debounce 400ms
+    setDetectTimer(t)
+    return () => window.clearTimeout(t)
+  }, [viewerLevel, autoDetect, lastUploadPath, dziUrl])
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode)
@@ -87,7 +118,72 @@ function App() {
                   Importez une photo pour découvrir la magie de l'amélioration des yeux
                 </p>
               </div>
-              <ImageUploader onImageUpload={(file: File) => console.log('Image uploadée:', file)} />
+              <div className="space-y-4">
+                <ImageUploader
+                  onImageUpload={async (file: File) => {
+                    try {
+                      setBusy(true)
+                      // 1) Upload image
+                      const up = await api.uploadImage(file)
+                      setLastUploadPath(up.path)
+                      // 2) Generate tiles
+                      const gen = await api.generateTiles(up.path)
+                      // 3) Construire l'URL vers /static
+                      const dziPath: string = gen.dzi_path // e.g. "<stem>.dzi"
+                      let staticUrl = `http://localhost:8000/static/${dziPath}`
+                      try {
+                        const res = await fetch(staticUrl, { method: 'HEAD' })
+                        if (!res.ok) {
+                          // tentative fallback si jamais le backend renvoie un chemin différent
+                          const alt = `http://localhost:8000/static/tiles/${dziPath}`
+                          const res2 = await fetch(alt, { method: 'HEAD' })
+                          if (res2.ok) staticUrl = alt
+                        }
+                      } catch (e) {
+                        console.error('DZI HEAD check error', e)
+                      }
+                      console.log('DZI URL:', staticUrl)
+                      setDziUrl(staticUrl)
+                      setOverlayUrl(undefined)
+                    } catch (e) {
+                      console.error('Upload pipeline error', e)
+                    } finally {
+                      setBusy(false)
+                    }
+                  }}
+                />
+
+                {busy && (
+                  <p className="text-center text-sm text-foreground/60">Traitement en cours...</p>
+                )}
+
+                {dziUrl && (
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="range"
+                        min={0}
+                        max={1}
+                        step={0.05}
+                        value={overlayOpacity}
+                        onChange={(e) => setOverlayOpacity(parseFloat(e.target.value))}
+                        className="w-40"
+                        title="Opacité heatmap"
+                      />
+                      <label className="flex items-center gap-2 text-sm text-foreground/70">
+                        <input type="checkbox" checked={autoDetect} onChange={(e) => setAutoDetect(e.target.checked)} />
+                        Détection auto
+                      </label>
+                    </div>
+                    <ImageViewer
+                      image={dziUrl}
+                      overlayImageUrl={overlayUrl}
+                      overlayOpacity={overlayOpacity}
+                      onLevelChange={setViewerLevel}
+                    />
+                  </div>
+                )}
+              </div>
             </motion.div>
           </div>
         </main>

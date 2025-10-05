@@ -26,3 +26,5 @@ lerna-debug.log*
 # dev4 files
 bootstrap.sh
 .NASAenv/
+archi.txt*
+
